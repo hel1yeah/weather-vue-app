@@ -1,0 +1,19 @@
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: $font-size;
+  font-weight: 600;
+  line-height: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: $font-size;
+}
+
+* {
+  box-sizing: border-box;
+}
