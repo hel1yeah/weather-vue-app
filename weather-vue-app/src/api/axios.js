@@ -1,8 +1,7 @@
-import axios from "axios";
+import axios from 'axios'
 
-const API_KEY = process.env.API_KEY;
-const LOCAL = "Kiev" ?? "Brovary";
+const BASE_URL = 'http://api.weatherapi.com/v1'
 
-axios.defaults.baseURL = `https://api.weatherapi.com/v1/current.json?${API_KEY}&${LOCAL}`;
+axios.defaults.baseURL = `${BASE_URL}/`
 
-export default axios;
+export default axios
