@@ -7,6 +7,10 @@ import './assets/scss/main.scss'
 
 Vue.config.productionTip = false
 
+import helpers from '@/plagins/helpers'
+
+Vue.use(helpers)
+
 new Vue({
   router,
   store,

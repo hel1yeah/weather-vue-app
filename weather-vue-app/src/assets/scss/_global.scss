@@ -1,8 +1,25 @@
+html {
+  height: 100%;
+}
+
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: $font-size;
   font-weight: 600;
   line-height: normal;
+  min-height: 100%;
+  position: relative;
+  background: {
+    color: #872aac;
+    image: url('http://surl.li/crczi');
+    size: cover;
+    position: center;
+    repeat: no-repeat;
+  }
+}
+
+#app {
+  height: 100%;
 }
 
 h1,

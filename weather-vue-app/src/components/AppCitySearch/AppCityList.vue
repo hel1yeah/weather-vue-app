@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getWeatherCity(city) {
-      this.$emit('getWeatherCity', city)
+      this.$emit('getFutureWeather', city)
     },
   },
   computed: {
@@ -42,7 +42,7 @@ export default {
 <style lang="scss">
 .city-list {
   position: absolute;
-  top: 40px;
+  top: 60px;
   left: 0;
   opacity: 0;
   transition: opacity 0.4s linear;

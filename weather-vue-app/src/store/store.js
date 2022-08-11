@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import citys from './modules/citys'
+import futureWeather from './modules/futureWeather'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -27,5 +28,6 @@ export default new Vuex.Store({
   getters: {},
   modules: {
     citys,
+    futureWeather,
   },
 })

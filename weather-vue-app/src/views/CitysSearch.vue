@@ -4,7 +4,7 @@
     <AppCityList
       :cityList="isStoreCityList"
       :showCityList="showCityList"
-      @getWeatherCity="getWeatherCity"
+      @getFutureWeather="getFutureWeather"
     />
     <AppLoader :class="[showLoader]" />
   </div>
@@ -44,19 +44,19 @@ export default {
   methods: {
     getSearchCityList() {
       debounce(() => {
-        this.$store.dispatch('getCityList', this.cityName)
+        this.$store.dispatch('citys/getCityList', this.cityName)
       }, 600)()
     },
     clearSearchCityList() {
-      this.$store.dispatch('clearSearchCityList')
+      this.$store.dispatch('citys/clearSearchCityList')
     },
-    getWeatherCity(city) {
+    getFutureWeather(city) {
       this.clearSearchCityList()
-      console.log(city)
+      this.$store.dispatch('futureWeather/getFutureWeather', city)
     },
   },
   computed: {
-    ...mapGetters(['isStoreCityList', 'isLoader']),
+    ...mapGetters('citys', ['isStoreCityList', 'isLoader']),
     showCityList() {
       return this.isStoreCityList !== null && this.isStoreCityList.length >= 1
     },
@@ -72,12 +72,13 @@ export default {
 <style lang="scss">
 .citys-search {
   position: relative;
-  margin: 20px auto;
+  margin: 0 auto 20px;
+  padding: 20px 0 0 0;
   max-width: 500px;
   & .loader {
     position: absolute;
     right: -35px;
-    top: 0;
+    top: 20px;
     opacity: 0;
     transition: opacity 0.1s linear;
     &.show {

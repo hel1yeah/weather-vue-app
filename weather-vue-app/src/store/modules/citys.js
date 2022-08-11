@@ -40,7 +40,7 @@ const actions = {
       ) {
         setTimeout(() => {
           commit('SET_CITY_LIST_SUCCESS', response.data)
-        }, 800)
+        }, 600)
       } else {
         commit('SET_CITY_LIST_FAILURE', REWSPONSE_NOT_CITY)
       }
@@ -58,4 +58,4 @@ const getters = {
   isLoader: (state) => state.loader,
 }
 
-export default { state, mutations, actions, getters }
+export default { state, mutations, actions, getters, namespaced: true }
