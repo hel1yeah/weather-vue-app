@@ -3,13 +3,13 @@ import { RESPONSE_STATUS } from './../../common/constants'
 
 const state = {
   weatherDays: [],
-  weatherLocation: [],
+  weatherLocation: null,
   error: null,
   loader: false,
 }
 const mutations = {
   SET_WEATHER_START(state) {
-    state.weatherLocation = []
+    state.weatherLocation = null
     state.weatherDays = []
     state.error = null
     state.loader = true
@@ -22,13 +22,13 @@ const mutations = {
   },
   SET_WEATHER_FAILURE(state, payload) {
     state.weatherDays = []
-    state.weatherLocation = []
+    state.weatherLocation = null
     state.error = payload
     state.loader = true
   },
   CLEAR_WEATHER(state) {
     state.weatherDays = []
-    state.weatherLocation = []
+    state.weatherLocation = null
     state.error = null
     state.loader = false
   },
