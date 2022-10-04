@@ -1,30 +1,75 @@
 <template>
   <div class="citys-search">
-    <AppSearchInput v-model:name="cityName"/>
-    <AppSearchList :citys="storeCitys.citys" @getWeatherCity="getWeatherCity"/>
+    <AppSearchInput v-model:name="cityName" />
+    <AppSearchList
+      v-if="showCityList"
+      v-model:show="showCityList"
+      :citys="storeCitys.citys"
+      @getWeatherCity="getWeatherCity"
+    />
+    <AppLoader :class="showLoader" />
   </div>
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
-import { useCitysStore } from '@/stores/citys.js';
+// === components ===
 import AppSearchInput from '@/components/AppCitySearch/AppSearchInput.vue';
 import AppSearchList from '@/components/AppCitySearch/AppSearchList.vue';
+import AppLoader from '@/components/common/AppLoader.vue';
+// === vue imports ===
+import { ref, watch, computed, onMounted } from 'vue';
+import { useCitysStore } from '@/stores/citys.js';
+import { useFutureWeatherApi } from '@/stores/futureWeather.js';
+// === other utilites ===
+import debounce from 'lodash/debounce';
+
+const cityName = ref('');
+const showCityList = ref(false);
+const isCity = localStorage.getItem('city');
 
 const storeCitys = useCitysStore();
-
-const cityName = ref(null);
+const storeWeather = useFutureWeatherApi();
 
 const getCities = (newV) => {
-  lengthCityName.value ? storeCitys.getCityList(newV) : storeCitys.clearCityList(newV);
+  if (lengthCityName.value) {
+    showCityList.value = true;
+    storeCitys.getCityList(newV);
+  } else {
+    storeCitys.clearCityList();
+    showCityList.value = false;
+  }
 };
 
-const getWeatherCity = (e) => console.log('getWeatherCity', e)
+const getWeatherCity = (e) => {
+  showCityList.value = false;
+  storeWeather.getFutureWeather(e);
+};
 
 const lengthCityName = computed(() => cityName.value.length >= 3);
 
-watch(cityName, (newV, oldV) => {
-  getCities(newV);
+const showLoader = computed(() => {
+  return {
+    show: storeCitys.loader,
+  };
+});
+
+watch(cityName, (newV) => {
+  if (newV === isCity) return;
+  debounce(() => {
+    getCities(newV);
+  }, 600)();
+});
+
+const LocalStorageCityName = () => {
+  if (isCity) {
+    storeWeather.getFutureWeather(isCity);
+    cityName.value = isCity;
+    showCityList.value = false;
+  }
+};
+
+onMounted(() => {
+  LocalStorageCityName();
 });
 </script>
 

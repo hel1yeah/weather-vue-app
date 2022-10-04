@@ -1,0 +1,61 @@
+html {
+  height: 100%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: $font-size;
+  font-weight: 600;
+  line-height: normal;
+  min-height: 100%;
+  position: relative;
+  background: {
+    color: #872aac;
+    image: linear-gradient(
+                    45deg,
+                    hsl(240deg 100% 20%) 0%,
+                    hsl(289deg 100% 21%) 11%,
+                    hsl(315deg 100% 27%) 22%,
+                    hsl(329deg 100% 36%) 33%,
+                    hsl(337deg 100% 43%) 45%,
+                    hsl(357deg 91% 59%) 56%,
+                    hsl(17deg 100% 59%) 67%,
+                    hsl(34deg 100% 53%) 78%,
+                    hsl(45deg 100% 50%) 89%,
+                    hsl(55deg 100% 50%) 100%
+    );
+    image: url('../images/space.jpg');
+    size: cover;
+    position: center;
+    repeat: no-repeat;
+  }
+}
+
+#app {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: $font-size;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0px 15px;
+}

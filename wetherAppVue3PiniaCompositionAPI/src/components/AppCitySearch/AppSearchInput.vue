@@ -5,6 +5,7 @@
      ref="focusInput"
      :value="name"
      @input="updateCityName($event.target.value)"
+     @keydown.enter="updateCityName($event.target.value)"
   />
 </template>
 

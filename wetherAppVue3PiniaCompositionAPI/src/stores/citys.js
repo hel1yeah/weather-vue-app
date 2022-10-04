@@ -1,4 +1,4 @@
-import { getCitysAxios } from '@/api/citysListApi';
+import { getCitysAxios } from '@/api/citysListApi.js';
 import { RESPONSE_STATUS } from '@/common/constants.js';
 import { ref, reactive } from 'vue';
 import { defineStore } from 'pinia';
