@@ -1,9 +1,9 @@
 <template>
   <div class="location">
-    <h2>City: {{ name }}</h2>
-    <span> Region: {{ region }} </span>
-    <span> Country: {{ countryp }} </span>
-    <span> Country: {{ geo }} </span>
+    <span>City: {{ name }},</span>
+    <span> Region: {{ region }}, </span>
+    <span> Country: {{ countryp }}, </span>
+    <span> Country: {{ geo }}, </span>
   </div>
 </template>
 
@@ -27,7 +27,10 @@ const geo = computed(() => props.country.tz_id
 
 <style scoped lang="scss">
 .location {
+  color: $white;
   display: flex;
   flex-direction: column;
+  font-size: 16px;
+  font-weight: 500;
 }
 </style>

@@ -53,8 +53,9 @@ const showLoader = computed(() => {
   };
 });
 
-watch(cityName, (newV) => {
+watch(cityName, (newV, oldV) => {
   if (newV === isCity) return;
+  if (oldV === isCity) return;
   debounce(() => {
     getCities(newV);
   }, 600)();
@@ -76,7 +77,7 @@ onMounted(() => {
 <style lang="scss">
 .citys-search {
   position: relative;
-  margin: 0 auto 20px;
+  margin: 0 auto 0;
   padding: 20px 0 0 0;
   max-width: 500px;
   & .loader {

@@ -1,15 +1,24 @@
 <template>
   <div class="days">
-    <div class="day" v-for="item in days" :key="item">
-      <div class="day__date">{{ item.sunday_afternoo }}</div>
-      <img :src="`https:${item.day.condition.icon}`" :alt="item.day.condition.text" />
-      <div class="day__date">maxtemp_c: {{ item.day.maxtemp_c }}</div>
-      <div class="day__date">mintemp_c: {{ item.day.mintemp_c }}</div>
+    <div class="day" ref="refWithTitle" v-for="item in days" :key="item">
+      <span class="day__date-sunday">{{ item.sunday_afternoo }}</span>
+      <img
+        class="day__img"
+        :src="`https:${item.day.condition.icon}`"
+        :alt="item.day.condition.text"
+      />
+      <div class="day__temp">
+        <span class="day__temp-max">{{ item.day.maxtemp_c }} &deg</span>
+        /
+        <span class="day__temp-min">{{ item.day.mintemp_c }} &deg</span>
+      </div>
     </div>
   </div>
+
 </template>
 <script setup>
-import { computed } from 'vue';
+import VanillaTilt from 'vanilla-tilt';
+import { ref, computed, watch, nextTick } from 'vue';
 const props = defineProps({
   forecast: {
     type: Object,
@@ -29,6 +38,33 @@ const days = computed(() => {
 
   return forecast;
 });
+const refWithTitle = ref([]);
+
+watch(days, () => {
+  nextTick(() => {
+    useVanillaTilt(refWithTitle.value);
+  });
+});
+
+function useVanillaTilt(ref) {
+  VanillaTilt.init(ref, {
+    reverse: true,
+    max: 15,
+    speed: 400,
+    scale: 1.02,
+    glare: true,
+    reset: true,
+    perspective: 1000,
+    transition: true,
+    'max-glare': 0.5,
+    'glare-prerender': false,
+    gyroscope: true,
+    gyroscopeMinAngleX: -45,
+    gyroscopeMaxAngleX: 45,
+    gyroscopeMinAngleY: -45,
+    gyroscopeMaxAngleY: 45,
+  });
+}
 </script>
 <style lang="scss">
 .days {
@@ -36,21 +72,45 @@ const days = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  margin-top: 10px;
 }
 
 .day {
+  cursor: pointer;
+  color: $white;
+  display: flex;
+  place-items: center;
+  flex-direction: column;
   position: relative;
   width: 120px;
   max-height: 150px;
-  box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
+  padding: 10px 5px;
+  box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.4);
   border-radius: 15px;
   background: rgba(255, 255, 255, 0.1);
   overflow: hidden;
   border-top: 1px solid rgba(255, 255, 255, 0.5);
   border-left: 1px solid rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(2px);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  will-change: transform;
+  &__date-sunday {
+    font-weight: 500;
+  }
+  &__img {
+    scale: 1.1;
+  }
+  &__temp {
+    font-weight: 300;
+    font-size: 14px;
+    gap: 5px;
+  }
+  &__temp-max {
+  }
+  &__temp-min {
+  }
 }
-
 </style>
 
 <!--      <div class="day__date">avgtemp_c: {{ item.day.avgtemp_c }}</div>-->
