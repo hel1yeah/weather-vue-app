@@ -1,19 +1,15 @@
 <template>
-  <h1>myChart</h1>
-  {{ data }}
-  <canvas
-    ref="ctx"
-    id="myChart"
-    width="400"
-    height="400"
-    aria-label="You do not support canvas technologies, I am sorry."
-    role="img"
-  ></canvas>
+  <apexchart width="100%" type="line" :options="options" :series="series" class="graph"></apexchart>
 </template>
 
 <script setup>
-import Chart from 'chart.js/auto';
-import { nextTick, ref, onUpdated } from 'vue';
+import VueApexCharts from 'vue3-apexcharts';
+import { ref, watch } from 'vue';
+
+watch(
+  () => props.data,
+  () => setSeries()
+);
 
 const props = defineProps({
   times: {
@@ -28,52 +24,54 @@ const props = defineProps({
   },
 });
 
-const ctx = ref(null);
+function setSeries() {
+  series.value = [
+    {
+      data: props.data,
+    },
+  ];
+}
 
-nextTick(() => {
-  const myChart = new Chart(ctx.value, {
-    type: 'line',
-    data: {
-      labels: props.times,
-      datasets: [
+const options = ref({
+  chart: {
+    id: 'vuechart-example',
+    foreColor: '#ffffff',
+  },
+  stroke: {
+    curve: 'smooth',
+    colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800']
+  },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      type: 'vertical',
+      shadeIntensity: 1,
+      opacityFrom: 1,
+      opacityTo: 1,
+      colorStops: [
         {
-          label: 'label temparatures day',
-          data: props.data,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-          ],
-          borderWidth: 1.4,
-          tension: 0.5,
+          offset: 40,
+          color: '#0ACEF9',
+          opacity: 1,
         },
-
       ],
     },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
+  },
+  xaxis: {
+    categories: props.times,
+  },
 });
 
-onUpdated(() => {
- // myChart.reset();
-})
+let series = ref([
+  {
+    name: 'series-1',
+    data: props.data,
+  },
+]);
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.graph{
+  padding-top: 20px;
+}
+</style>

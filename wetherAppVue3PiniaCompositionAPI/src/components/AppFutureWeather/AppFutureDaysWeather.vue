@@ -56,22 +56,16 @@ const isChar = ref(0);
 
 const arrTimes = computed(() => {
   const forecast = props?.forecast[isChar.value]?.hour;
-  if (forecast) {
-    const arr = forecast.map((hour) => {
-      return hour.time.split(' ').slice(-1).toString();
-    });
-    return arr;
-  }
+  return forecast.map((hour) => {
+    return hour.time.split(' ').slice(-1).toString();
+  });
 });
 
 const arrData = computed(() => {
   const forecast = props?.forecast[isChar.value]?.hour;
-  if (forecast) {
-    const arr = forecast.map((hour) => {
-      return hour?.temp_c;
-    });
-    return arr;
-  }
+  return forecast.map((hour) => {
+    return hour?.temp_c;
+  });
 });
 
 const refWithTitle = ref([]);

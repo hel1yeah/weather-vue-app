@@ -1,15 +1,18 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
-import App from './App.vue'
-import router from './router'
+import App from './App.vue';
+import router from './router';
 
-import '@/assets/scss/main.scss'
+import VueApexCharts from 'vue3-apexcharts';
 
-const pinia = createPinia()
-const app = createApp(App)
+import '@/assets/scss/main.scss';
 
-app.use(pinia)
-app.use(router)
+const pinia = createPinia();
+const app = createApp(App);
 
-app.mount('#app')
+app.use(pinia);
+app.use(router);
+app.use(VueApexCharts);
+
+app.mount('#app');
