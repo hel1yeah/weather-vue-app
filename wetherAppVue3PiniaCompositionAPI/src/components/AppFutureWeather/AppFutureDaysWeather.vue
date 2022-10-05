@@ -1,6 +1,12 @@
 <template>
   <div class="days">
-    <div class="day" ref="refWithTitle" v-for="item in days" :key="item">
+    <div
+      class="day"
+      ref="refWithTitle"
+      v-for="(item, idx) in days"
+      :key="idx"
+      @click="setArray(idx)"
+    >
       <span class="day__date-sunday">{{ item.sunday_afternoo }}</span>
       <img
         class="day__img"
@@ -14,11 +20,13 @@
       </div>
     </div>
   </div>
-
+  <AppGraphDay :times="arrTimes" :data="arrData" />
 </template>
 <script setup>
 import VanillaTilt from 'vanilla-tilt';
 import { ref, computed, watch, nextTick } from 'vue';
+import AppGraphDay from '@/components/AppFutureWeather/AppGraphDay.vue';
+
 const props = defineProps({
   forecast: {
     type: Object,
@@ -26,18 +34,46 @@ const props = defineProps({
     default: () => {},
   },
 });
+
 const daysSandey = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const days = computed(() => {
-  const forecast = props.forecast.value;
+  const forecast = props.forecast;
 
-  forecast.map((day) => {
+  forecast.forEach((day) => {
     let numSandey = new Date(day.date).getDay();
     day['sunday_afternoo'] = daysSandey[numSandey];
   });
 
   return forecast;
 });
+
+const setArray = (e) => {
+  isChar.value = e;
+};
+
+const isChar = ref(0);
+
+const arrTimes = computed(() => {
+  const forecast = props?.forecast[isChar.value]?.hour;
+  if (forecast) {
+    const arr = forecast.map((hour) => {
+      return hour.time.split(' ').slice(-1).toString();
+    });
+    return arr;
+  }
+});
+
+const arrData = computed(() => {
+  const forecast = props?.forecast[isChar.value]?.hour;
+  if (forecast) {
+    const arr = forecast.map((hour) => {
+      return hour?.temp_c;
+    });
+    return arr;
+  }
+});
+
 const refWithTitle = ref([]);
 
 watch(days, () => {

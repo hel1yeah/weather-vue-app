@@ -12,7 +12,6 @@ body {
   min-height: 100%;
   position: relative;
   background: {
-    color: #872aac;
     image: linear-gradient(
       45deg,
       hsl(240deg 100% 20%) 0%,
@@ -27,7 +26,7 @@ body {
       hsl(55deg 100% 50%) 100%
     );
     //image: url('../images/space.jpg');
-    size: cover;
+    size: 100%;
     position: center;
     repeat: no-repeat;
   }

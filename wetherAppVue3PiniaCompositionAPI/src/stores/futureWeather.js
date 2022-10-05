@@ -1,10 +1,10 @@
 import { getFutureWeatherApi } from '@/api/futureWeatherApi.js';
 import { RESPONSE_STATUS } from '@/common/constants.js';
-import { reactive, ref } from 'vue';
+import {  ref } from 'vue';
 import { defineStore } from 'pinia';
 
 export const useFutureWeatherApi = defineStore('future-weather', () => {
-  const weatherForecast = reactive({});
+  const weatherForecast = ref({});
   const weatherLocation = ref([]);
   const error = ref(null);
   const loader = ref(false);
