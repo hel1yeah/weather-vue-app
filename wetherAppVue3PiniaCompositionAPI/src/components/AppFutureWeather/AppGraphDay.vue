@@ -1,5 +1,11 @@
 <template>
-  <apexchart width="100%" type="line" :options="options" :series="series" class="graph"></apexchart>
+  <VueApexCharts
+    width="100%"
+    type="line"
+    :options="options"
+    :series="series"
+    class="graph"
+  ></VueApexCharts>
 </template>
 
 <script setup>
@@ -8,6 +14,11 @@ import { ref, watch } from 'vue';
 
 watch(
   () => props.data,
+  () => setSeries()
+);
+
+watch(
+  () => props.rain,
   () => setSeries()
 );
 
@@ -22,12 +33,20 @@ const props = defineProps({
     required: true,
     default: () => [],
   },
+  rain: {
+    type: Array,
+    required: true,
+    default: () => [],
+  },
 });
 
 function setSeries() {
   series.value = [
     {
       data: props.data,
+    },
+    {
+      data: props.rain,
     },
   ];
 }
@@ -36,42 +55,59 @@ const options = ref({
   chart: {
     id: 'vuechart-example',
     foreColor: '#ffffff',
+    height: '200px',
   },
   stroke: {
     curve: 'smooth',
-    colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800']
+    colors: ['#0ACEF9', '#8A0067FF'],
+    width: 5,
   },
-  fill: {
-    type: 'gradient',
-    gradient: {
-      type: 'vertical',
-      shadeIntensity: 1,
-      opacityFrom: 1,
-      opacityTo: 1,
-      colorStops: [
-        {
-          offset: 40,
-          color: '#0ACEF9',
-          opacity: 1,
-        },
-      ],
-    },
+  grid: {
+    borderColor: '#92fc7a',
   },
+
   xaxis: {
     categories: props.times,
   },
+  markers: {
+    colors: ['#0ACEF9', '#8A0067FF'],
+  },
+  legend: {
+    markers: {
+      width: 15,
+      height: 15,
+      fillColors: ['#0ACEF9', '#8A0067FF'],
+    }
+  },
+  yaxis: [
+    {
+      title: {
+        text: 'Temperature °C',
+      },
+    },
+    {
+      opposite: true,
+      title: {
+        text: 'Chance of rain',
+      },
+    },
+  ],
 });
 
 let series = ref([
   {
-    name: 'series-1',
+    name: 'Temperature °C',
     data: props.data,
+  },
+  {
+    name: 'Chance of rain %',
+    data: props.rain,
   },
 ]);
 </script>
 
 <style scoped lang="scss">
-.graph{
-  padding-top: 20px;
+.graph {
+  //padding-top: 20px;
 }
 </style>

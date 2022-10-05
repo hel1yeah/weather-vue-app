@@ -29,8 +29,8 @@ const geo = computed(() => props.country.tz_id
 .location {
   color: $white;
   display: flex;
-  flex-direction: column;
   font-size: 16px;
+  flex-wrap: wrap;
   font-weight: 500;
 }
 </style>

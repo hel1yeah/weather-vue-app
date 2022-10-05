@@ -12,20 +12,22 @@ import AppWeatherLocation from '@/components/AppFutureWeather/AppWeatherLocation
 import AppFutureDaysWeather from '@/components/AppFutureWeather/AppFutureDaysWeather.vue';
 import AppLoader from '@/components/common/AppLoader.vue';
 // === vue imports ===
-import {computed, nextTick} from 'vue';
+import { computed, nextTick } from 'vue';
 import { useFutureWeatherApi } from '@/stores/futureWeather.js';
 // === other utilites ===
 import isEmpty from 'lodash/isEmpty';
 const storeFutureWeather = useFutureWeatherApi();
 
 const isLoadedWeather = computed(() => {
-  return isEmpty(storeFutureWeather?.weatherLocation) && isEmpty(storeFutureWeather?.weatherForecast)
-})
-
+  return (
+    isEmpty(storeFutureWeather?.weatherLocation) && isEmpty(storeFutureWeather?.weatherForecast)
+  );
+});
 </script>
 
 <style lang="scss">
 .future-weather {
   margin-top: 10px;
+  display: grid;
 }
 </style>
