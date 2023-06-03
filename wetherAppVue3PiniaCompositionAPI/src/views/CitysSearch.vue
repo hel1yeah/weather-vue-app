@@ -76,19 +76,18 @@ onMounted(() => {
 
 <style lang="scss">
 .citys-search {
+  width: 100%;
   position: relative;
   margin: 0 auto 0;
-  padding: 20px 0 0 0;
   @include wide-850 {
     position: relative;
     margin: 0 auto 0 0;
-    padding: 20px 0 0 0;
     max-width: 90%;
   }
   & .loader {
     position: absolute;
     right: -35px;
-    top: 20px;
+    top: 0px;
     opacity: 0;
     transition: opacity 0.1s linear;
     &.show {

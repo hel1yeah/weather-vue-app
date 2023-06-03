@@ -56,6 +56,12 @@ const options = ref({
     id: 'vuechart-example',
     foreColor: '#ffffff',
     height: '200px',
+    toolbar: {
+      show: false,
+    },
+    zoom: {
+      enabled: false,
+    },
   },
   stroke: {
     curve: 'smooth',
@@ -77,8 +83,9 @@ const options = ref({
       width: 15,
       height: 15,
       fillColors: ['#0ACEF9', '#8A0067FF'],
-    }
+    },
   },
+
   yaxis: [
     {
       title: {

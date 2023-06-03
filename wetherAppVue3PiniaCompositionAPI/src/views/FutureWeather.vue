@@ -29,5 +29,6 @@ const isLoadedWeather = computed(() => {
 .future-weather {
   margin-top: 10px;
   display: grid;
+  width: 100%;
 }
 </style>

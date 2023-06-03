@@ -55,7 +55,7 @@ onUnmounted(() => {
 <style lang="scss">
 .city-list {
   position: absolute;
-  top: 60px;
+  top: 32px;
   left: 0;
   transition: opacity 0.4s linear;
   border-radius: 5px;

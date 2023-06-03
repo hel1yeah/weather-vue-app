@@ -80,7 +80,6 @@ const arrChanceRain = computed(() => {
   });
 });
 
-
 const refWithTitle = ref([]);
 
 nextTick(() => {
@@ -121,9 +120,9 @@ function useVanillaTilt() {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto 1fr 1fr;
     grid-template-areas:
-    'days days days'
-    'chart chart chart'
-    'chart chart chart';
+      'days days days'
+      'chart chart chart'
+      'chart chart chart';
     row-gap: 20px;
   }
 }
@@ -146,7 +145,7 @@ function useVanillaTilt() {
   place-items: center;
   flex-direction: column;
   position: relative;
-  width: 120px;
+  width: 100%;
   max-height: 150px;
   padding: 10px 5px;
   box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.4);
@@ -166,6 +165,7 @@ function useVanillaTilt() {
     scale: 1.1;
   }
   &__temp {
+    display: flex;
     font-weight: 300;
     font-size: 14px;
     gap: 5px;
