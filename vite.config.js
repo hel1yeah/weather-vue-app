@@ -1,7 +1,12 @@
 import { fileURLToPath, URL } from 'node:url';
+import path from 'node:path';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+
+const varsPath = path
+  .resolve(fileURLToPath(new URL('./src/assets/scss/_vars.scss', import.meta.url)))
+  .replace(/\\/g, '/');
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,9 +19,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `
-          @import "./src/assets/scss/_vars.scss";
-        `,
+        additionalData: `@import "${varsPath}";`,
+        silenceDeprecations: ['import', 'legacy-js-api', 'global-builtin'],
       },
     },
   },
