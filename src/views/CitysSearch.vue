@@ -1,12 +1,40 @@
 <template>
   <div ref="rootRef" class="city-search">
-    <AppSearchInput
-      v-model="cityName"
-      :expanded="isListVisible"
-      @navigate="handleNavigate"
-      @select-active="handleEnter"
-      @close="closeList"
-    />
+    <div class="city-search__row">
+      <AppSearchInput
+        v-model="cityName"
+        :expanded="isListVisible"
+        @navigate="handleNavigate"
+        @select-active="handleEnter"
+        @close="closeList"
+      />
+      <button
+        v-if="geo.isSupported()"
+        type="button"
+        class="city-search__locate"
+        :class="{ 'city-search__locate--loading': geo.loading.value }"
+        :disabled="geo.loading.value"
+        :aria-label="geo.loading.value ? 'Detecting location…' : 'Use my location'"
+        :title="geo.loading.value ? 'Detecting…' : 'Use my location'"
+        @click="locateMe"
+      >
+        <svg
+          class="city-search__locate-icon"
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+        </svg>
+      </button>
+    </div>
 
     <AppSearchList
       v-if="isListVisible && hasResults"
@@ -33,6 +61,14 @@
     </p>
 
     <p
+      v-else-if="geoErrorMessage"
+      class="city-search__hint city-search__hint--error"
+      role="alert"
+    >
+      {{ geoErrorMessage }}
+    </p>
+
+    <p
       v-else-if="showMinLengthHint"
       class="city-search__hint"
     >
@@ -54,6 +90,7 @@ import AppLoader from '@/components/common/AppLoader.vue';
 import { useCitiesStore } from '@/stores/cities.js';
 import { useForecastStore } from '@/stores/forecast.js';
 import { useCityStorage } from '@/composables/useCityStorage.js';
+import { useGeolocation } from '@/composables/useGeolocation.js';
 
 const MIN_QUERY_LENGTH = 3;
 const DEBOUNCE_MS = 500;
@@ -62,10 +99,36 @@ const rootRef = ref(null);
 const cityName = ref('');
 const isListVisible = ref(false);
 const activeIndex = ref(-1);
+const geoErrorMessage = ref('');
 
 const citiesStore = useCitiesStore();
 const forecastStore = useForecastStore();
 const { getCity, setCity } = useCityStorage();
+const geo = useGeolocation();
+
+const geoErrorText = (err) => {
+  if (!err) return '';
+  if (err.code === 1) return 'Location access denied. Please type a city manually.';
+  if (err.code === 2) return 'Location is unavailable.';
+  if (err.code === 3) return 'Location request timed out.';
+  return err.message || 'Could not detect location.';
+};
+
+const locateMe = async () => {
+  geoErrorMessage.value = '';
+  const query = await geo.locate();
+  if (query) {
+    closeList();
+    await forecastStore.fetchForecast(query);
+    const detectedName = forecastStore.location?.name;
+    if (detectedName) {
+      cityName.value = detectedName;
+      setCity(detectedName);
+    }
+  } else {
+    geoErrorMessage.value = geoErrorText(geo.error.value);
+  }
+};
 
 const hasResults = computed(() => citiesStore.cities.length > 0);
 const showNotFound = computed(
@@ -139,6 +202,8 @@ onMounted(() => {
   if (saved) {
     cityName.value = saved;
     forecastStore.fetchForecast(saved);
+  } else if (geo.isSupported()) {
+    locateMe();
   }
 });
 
@@ -168,6 +233,53 @@ onUnmounted(() => {
 
   &_visible {
     opacity: 1;
+  }
+}
+
+.city-search__row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.city-search__locate {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+
+  &:hover:not(:disabled) {
+    background: rgba(10, 206, 249, 0.2);
+    border-color: rgba(10, 206, 249, 0.6);
+    color: #0acef9;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0acef9;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: progress;
+    opacity: 0.7;
+  }
+
+  &--loading .city-search__locate-icon {
+    animation: locate-spin 1s linear infinite;
+  }
+}
+
+@keyframes locate-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
