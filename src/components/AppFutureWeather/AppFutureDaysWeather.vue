@@ -1,140 +1,118 @@
 <template>
   <div class="days-weather">
     <div class="days">
-      <div
+      <button
+        v-for="(day, idx) in days"
+        :key="day.date"
+        ref="dayRefs"
+        type="button"
         class="day"
-        ref="refWithTitle"
-        v-for="(item, idx) in days"
-        :key="idx"
-        @click="setArray(idx)"
+        :class="{ 'day--active': idx === activeIdx }"
+        :aria-pressed="idx === activeIdx"
+        :aria-label="`${day.weekday}, high ${day.day.maxtemp_c}° low ${day.day.mintemp_c}°, ${day.day.condition.text}`"
+        @click="activeIdx = idx"
       >
-        <span class="day__date-sunday">{{ item.sunday_afternoo }}</span>
+        <span class="day__weekday">{{ day.weekday }}</span>
         <img
           class="day__img"
-          :src="`https:${item.day.condition.icon}`"
-          :alt="item.day.condition.text"
+          :src="`https:${day.day.condition.icon}`"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
         />
         <div class="day__temp">
-          <span class="day__temp-max">{{ item.day.maxtemp_c }} &deg</span>
+          <span>{{ day.day.maxtemp_c }}&deg;</span>
           /
-          <span class="day__temp-min">{{ item.day.mintemp_c }} &deg</span>
+          <span>{{ day.day.mintemp_c }}&deg;</span>
         </div>
-      </div>
+      </button>
     </div>
-    <AppGraphDay class="chart" :times="arrTimes" :data="arrData" :rain="arrChanceRain" />
+    <AppGraphDay
+      class="chart"
+      :hours="activeDayHours"
+      :date="activeDate"
+    />
   </div>
 </template>
+
 <script setup>
+import { ref, computed, watch, onMounted } from 'vue';
 import VanillaTilt from 'vanilla-tilt';
-import { ref, computed, watch, nextTick } from 'vue';
 import AppGraphDay from '@/components/AppFutureWeather/AppGraphDay.vue';
 
 const props = defineProps({
-  forecast: {
-    type: Object,
-    required: true,
-    default: () => {},
-  },
+  forecast: { type: Array, default: () => [] },
 });
 
-const daysSandey = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const activeIdx = ref(0);
+const dayRefs = ref([]);
 
-const setArray = (e) => {
-  isChar.value = e;
+const weekdayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
+
+const days = computed(() =>
+  props.forecast.map((day) => ({
+    ...day,
+    weekday: weekdayFormatter.format(new Date(day.date)),
+  })),
+);
+
+const activeDayHours = computed(() => props.forecast[activeIdx.value]?.hour ?? []);
+const activeDate = computed(() => props.forecast[activeIdx.value]?.date ?? '');
+
+const TILT_OPTIONS = {
+  reverse: true,
+  max: 15,
+  speed: 400,
+  scale: 1.02,
+  glare: true,
+  reset: true,
+  perspective: 1000,
+  transition: true,
+  'max-glare': 0.5,
+  gyroscope: true,
+  gyroscopeMinAngleX: -45,
+  gyroscopeMaxAngleX: 45,
+  gyroscopeMinAngleY: -45,
+  gyroscopeMaxAngleY: 45,
 };
 
-const isChar = ref(0);
+const destroyTilt = () => {
+  dayRefs.value.forEach((el) => el?.vanillaTilt?.destroy());
+};
 
-const days = computed(() => {
-  const forecast = props.forecast;
+const initTilt = () => {
+  destroyTilt();
+  const elements = dayRefs.value.filter(Boolean);
+  if (elements.length) VanillaTilt.init(elements, TILT_OPTIONS);
+};
 
-  forecast.forEach((day) => {
-    let numSandey = new Date(day.date).getDay();
-    day['sunday_afternoo'] = daysSandey[numSandey];
-  });
-
-  return forecast;
+onMounted(initTilt);
+watch(days, async () => {
+  await Promise.resolve();
+  initTilt();
 });
-
-const arrTimes = computed(() => {
-  const forecast = props?.forecast[isChar.value]?.hour;
-  if (!forecast) return [];
-  return forecast.map((hour) => {
-    return hour.time.split(' ').slice(-1).toString();
-  });
-});
-
-const arrData = computed(() => {
-  const forecast = props?.forecast[isChar.value]?.hour;
-  if (!forecast) return [];
-  return forecast.map((hour) => {
-    return hour?.temp_c;
-  });
-});
-
-const arrChanceRain = computed(() => {
-  const forecast = props?.forecast[isChar.value]?.hour;
-  if (!forecast) return [];
-  return forecast.map((hour) => {
-    return hour?.chance_of_rain;
-  });
-});
-
-const refWithTitle = ref([]);
-
-nextTick(() => {
-  useVanillaTilt();
-});
-
-function useVanillaTilt() {
-  VanillaTilt.init(refWithTitle.value, {
-    reverse: true,
-    max: 15,
-    speed: 400,
-    scale: 1.02,
-    glare: true,
-    reset: true,
-    perspective: 1000,
-    transition: true,
-    'max-glare': 0.5,
-    'glare-prerender': false,
-    gyroscope: true,
-    gyroscopeMinAngleX: -45,
-    gyroscopeMaxAngleX: 45,
-    gyroscopeMinAngleY: -45,
-    gyroscopeMaxAngleY: 45,
-  });
-}
 </script>
-<style lang="scss">
+
+<style lang="scss" scoped>
 .days-weather {
-  margin: 30px 0 0;
+  margin-top: 30px;
   display: grid;
-  grid-template-columns: auto 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-areas:
-    'days chart chart'
-    'days chart chart'
-    'days chart chart';
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+
   @include wide-850 {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr;
-    grid-template-areas:
-      'days days days'
-      'chart chart chart'
-      'chart chart chart';
-    row-gap: 20px;
+    grid-template-columns: 1fr;
   }
 }
+
 .days {
-  grid-area: days;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
   flex-direction: column;
   gap: 10px;
+
   @include wide-850 {
     flex-direction: row;
+    justify-content: space-around;
   }
 }
 
@@ -142,8 +120,8 @@ function useVanillaTilt() {
   cursor: pointer;
   color: $white;
   display: flex;
-  place-items: center;
   flex-direction: column;
+  place-items: center;
   position: relative;
   width: 100%;
   max-height: 150px;
@@ -158,7 +136,13 @@ function useVanillaTilt() {
   transform-style: preserve-3d;
   perspective: 1000px;
   will-change: transform;
-  &__date-sunday {
+  transition: box-shadow 0.3s;
+
+  &--active {
+    box-shadow: 0 0 25px rgba(10, 206, 249, 0.6);
+  }
+
+  &__weekday {
     font-weight: 500;
   }
   &__img {
@@ -166,27 +150,27 @@ function useVanillaTilt() {
   }
   &__temp {
     display: flex;
+    gap: 5px;
     font-weight: 300;
     font-size: 14px;
-    gap: 5px;
-  }
-  &__temp-max {
-  }
-  &__temp-min {
   }
 }
+
 .chart {
-  width: 100%;
-  grid-area: chart;
   display: grid;
   place-items: center;
 }
+
+button.day {
+  font: inherit;
+  text-align: inherit;
+  border-right: none;
+  border-bottom: none;
+  appearance: none;
+
+  &:focus-visible {
+    outline: 2px solid #0acef9;
+    outline-offset: 2px;
+  }
+}
 </style>
-
-.container { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr 1fr;
-gap: 0px 0px; grid-template-areas: 'city city city' 'days grap grap' 'days grap grap' 'days grap
-grap'; }
-
-<!--      <div class="day__date">avgtemp_c: {{ item.day.avgtemp_c }}</div>-->
-<!--      <div class="day__date">avghumidity: {{ item.day.avghumidity }}</div>-->
-<!--      <div class="day__date">condition text: {{ item.day.condition.text }}</div>-->

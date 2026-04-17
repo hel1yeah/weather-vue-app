@@ -1,34 +1,23 @@
 <template>
-  <div class="location">
-    <span>City: {{ name }},</span>
-    <span> Region: {{ region }}, </span>
-    <span> Country: {{ countryp }}, </span>
-    <span> Country: {{ geo }}, </span>
+  <div v-if="location" class="location">
+    <span v-if="location.name">City: {{ location.name }}</span>
+    <span v-if="location.region">Region: {{ location.region }}</span>
+    <span v-if="location.country">Country: {{ location.country }}</span>
+    <span v-if="location.tz_id">Timezone: {{ location.tz_id }}</span>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
-const props = defineProps({
-  country: {
-    type: null,
-    required: true,
-    default: null,
-  },
+defineProps({
+  location: { type: Object, default: null },
 });
-
-const name = computed(() => props.country.name)
-const region = computed(() => props.country.region)
-const countryp = computed(() => props.country.country)
-const geo = computed(() => props.country.tz_id
-);
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .location {
   color: $white;
   display: flex;
+  gap: 12px;
   font-size: 16px;
   flex-wrap: wrap;
   font-weight: 500;

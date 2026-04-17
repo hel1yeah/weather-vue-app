@@ -1,39 +1,44 @@
 <template>
   <input
+    ref="inputRef"
     class="search-input"
-    type="text"
-    ref="focusInput"
-    :value="name"
-    @input="updateCityName($event.target.value)"
-    @keydown.enter="updateCityName($event.target.value)"
+    type="search"
+    role="combobox"
+    :value="modelValue"
+    :placeholder="placeholder"
+    :aria-label="placeholder"
+    :aria-expanded="expanded"
+    aria-autocomplete="list"
+    aria-controls="city-search-listbox"
+    autocomplete="off"
+    spellcheck="false"
+    @input="$emit('update:modelValue', $event.target.value)"
+    @keydown.down.prevent="$emit('navigate', 'down')"
+    @keydown.up.prevent="$emit('navigate', 'up')"
+    @keydown.enter.prevent="$emit('select-active')"
+    @keydown.escape.prevent="$emit('close')"
   />
 </template>
 
 <script setup>
-import { defineProps, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const props = defineProps({
-  name: {
-    type: String,
-    default: 'name',
-    required: false,
-  },
+defineProps({
+  modelValue: { type: String, default: '' },
+  placeholder: { type: String, default: 'Start typing a city name…' },
+  expanded: { type: Boolean, default: false },
 });
 
-const focusInput = ref(null);
+defineEmits(['update:modelValue', 'navigate', 'select-active', 'close']);
 
-onMounted(() => focusInput.value.focus());
+const inputRef = ref(null);
 
-const emits = defineEmits(['update:name']);
-
-const updateCityName = (val) => {
-  emits('update:name', val);
-};
+onMounted(() => inputRef.value?.focus());
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .search-input {
-  padding: 0px 10px;
+  padding: 0 10px;
   width: 100%;
   height: 30px;
   border-radius: 5px;

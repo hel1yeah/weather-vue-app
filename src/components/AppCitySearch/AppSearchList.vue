@@ -1,58 +1,39 @@
 <template>
-  <ul class="city-list" ref="cityListRef">
+  <ul
+    id="city-search-listbox"
+    class="city-list"
+    role="listbox"
+    aria-label="City suggestions"
+  >
     <li
+      v-for="(city, idx) in cities"
+      :id="`city-option-${idx}`"
+      :key="city.id ?? `${city.name}-${city.lat}-${city.lon}`"
+      role="option"
       class="city-list__item"
-      v-for="city in citys.value"
-      :key="city.id"
-      @click="getWeatherCity(city.name)"
+      :class="{ 'city-list__item--active': idx === activeIndex }"
+      :aria-selected="idx === activeIndex"
+      @mouseenter="$emit('hover', idx)"
+      @click="$emit('select', city.name)"
     >
-      {{ city.name }}
+      {{ formatCity(city) }}
     </li>
   </ul>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
-
-const props = defineProps({
-  citys: {
-    type: Object,
-    default: () => {},
-    required: true,
-  },
-  show: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
+defineProps({
+  cities: { type: Array, default: () => [] },
+  activeIndex: { type: Number, default: -1 },
 });
 
-const emits = defineEmits(['getWeatherCity', 'update:show']);
+defineEmits(['select', 'hover']);
 
-const cityListRef = ref(null);
-
-const getWeatherCity = (cityName) => {
-  emits('getWeatherCity', cityName);
-  emits('update:show', false);
-  localStorage.setItem('city', cityName);
-};
-
-function loges(e) {
-  const ul = e.target.closest('ul');
-  console.log('e.target', e.target);
-  console.log('e.className', e.target.className);
-  console.log('e.classList', e.classList);
-}
-
-onMounted(() => {
-  window.addEventListener('click', loges);
-});
-onUnmounted(() => {
-  window.removeEventListener('click', loges);
-});
+const formatCity = (city) =>
+  [city.name, city.region, city.country].filter(Boolean).join(', ');
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .city-list {
   position: absolute;
   top: 32px;
@@ -77,12 +58,14 @@ onUnmounted(() => {
     hsl(207deg 99% 79%) 96%,
     hsl(247deg 100% 86%) 100%
   );
+
   &__item {
     padding: 5px 10px;
     color: whitesmoke;
     transition: background-color 0.3s linear, color 0.4s linear;
 
-    &:hover {
+    &:hover,
+    &--active {
       background-color: coral;
       color: white;
       cursor: pointer;
