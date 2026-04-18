@@ -36,39 +36,38 @@ const formatCity = (city) =>
 <style lang="scss" scoped>
 .city-list {
   position: absolute;
-  top: 32px;
+  top: 44px;
   left: 0;
-  transition: opacity 0.4s linear;
-  border-radius: 5px;
-  overflow: hidden;
   width: 100%;
   z-index: 500;
-  background-image: linear-gradient(
-    45deg,
-    hsl(297deg 100% 61%) 0%,
-    hsl(322deg 100% 58%) 5%,
-    hsl(348deg 100% 55%) 12%,
-    hsl(13deg 100% 52%) 21%,
-    hsl(36deg 100% 51%) 31%,
-    hsl(55deg 99% 54%) 43%,
-    hsl(74deg 98% 56%) 55%,
-    hsl(93deg 97% 59%) 67%,
-    hsl(126deg 97% 64%) 78%,
-    hsl(167deg 98% 71%) 88%,
-    hsl(207deg 99% 79%) 96%,
-    hsl(247deg 100% 86%) 100%
-  );
+  padding: 6px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(15, 17, 28, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: opacity 0.25s ease;
 
   &__item {
-    padding: 5px 10px;
-    color: whitesmoke;
-    transition: background-color 0.3s linear, color 0.4s linear;
+    padding: 9px 12px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.85);
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
 
     &:hover,
     &--active {
-      background-color: coral;
-      color: white;
+      background: linear-gradient(
+        90deg,
+        rgba(56, 189, 248, 0.22),
+        rgba(168, 85, 247, 0.22)
+      );
+      color: $white;
       cursor: pointer;
+      transform: translateX(2px);
     }
   }
 }

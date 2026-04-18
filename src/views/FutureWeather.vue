@@ -43,26 +43,33 @@ const hasData = computed(
 
 <style lang="scss" scoped>
 .future-weather {
-  margin-top: 10px;
+  margin-top: 16px;
   display: grid;
+  gap: 12px;
   width: 100%;
 }
 
 .future-weather__status {
-  margin-top: 20px;
+  margin-top: 22px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
   color: rgba(255, 255, 255, 0.75);
   font-size: 14px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
   &--muted {
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   &--error {
-    color: #ffb4b4;
+    color: #fca5a5;
+    border-color: rgba(248, 113, 113, 0.35);
+    background: rgba(248, 113, 113, 0.08);
   }
 }
 

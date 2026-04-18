@@ -95,13 +95,15 @@ watch(days, async () => {
 
 <style lang="scss" scoped>
 .days-weather {
-  margin-top: 30px;
+  margin-top: 24px;
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 20px;
 
   @include wide-850 {
+    margin-top: 16px;
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 }
 
@@ -112,7 +114,7 @@ watch(days, async () => {
 
   @include wide-850 {
     flex-direction: row;
-    justify-content: space-around;
+    gap: 8px;
   }
 }
 
@@ -122,28 +124,41 @@ watch(days, async () => {
   display: flex;
   flex-direction: column;
   place-items: center;
+  gap: 2px;
   position: relative;
   width: 100%;
-  max-height: 150px;
-  padding: 10px 5px;
-  box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.4);
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.1);
+  max-height: 160px;
+  padding: 12px 8px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+  border-radius: 16px;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.04)
+  );
   overflow: hidden;
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-  border-left: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   transform-style: preserve-3d;
   perspective: 1000px;
   will-change: transform;
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
 
   &--active {
-    box-shadow: 0 0 25px rgba(10, 206, 249, 0.6);
+    border-color: rgba(56, 189, 248, 0.55);
+    background: linear-gradient(
+      160deg,
+      rgba(56, 189, 248, 0.18),
+      rgba(168, 85, 247, 0.1)
+    );
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3),
+      0 12px 30px rgba(56, 189, 248, 0.35);
   }
 
   &__weekday {
     font-weight: 500;
+    letter-spacing: 0.5px;
   }
   &__img {
     scale: 1.1;
@@ -153,6 +168,26 @@ watch(days, async () => {
     gap: 5px;
     font-weight: 300;
     font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  @include wide-850 {
+    padding: 8px 4px 6px;
+    gap: 0;
+    max-height: none;
+    border-radius: 12px;
+
+    &__weekday {
+      font-size: 13px;
+    }
+    &__img {
+      scale: 0.85;
+      margin: -4px 0;
+    }
+    &__temp {
+      font-size: 12px;
+      gap: 3px;
+    }
   }
 }
 
@@ -164,12 +199,12 @@ watch(days, async () => {
 button.day {
   font: inherit;
   text-align: inherit;
-  border-right: none;
-  border-bottom: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   appearance: none;
 
   &:focus-visible {
-    outline: 2px solid #0acef9;
+    outline: 2px solid $color-primary;
     outline-offset: 2px;
   }
 }

@@ -34,25 +34,62 @@ const LINKS = [
 <style lang="scss" scoped>
 .footer {
   flex-shrink: 0;
-  padding: 10px 0;
-  background-color: rgb(153, 67, 252);
+  padding: 12px 0;
+  background: linear-gradient(
+    90deg,
+    rgba(56, 189, 248, 0.12),
+    rgba(168, 85, 247, 0.18),
+    rgba(236, 72, 153, 0.12)
+  );
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .footer__list {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .footer__list-item {
-  transition: transform 0.5s;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.35s ease, background 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-10px);
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 10px 24px rgba(56, 189, 248, 0.25);
   }
 }
 
+.footer__list-link {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 .footer__list-img {
-  max-width: 40px;
+  max-width: 30px;
+  max-height: 30px;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+  transition: opacity 0.2s;
+
+  .footer__list-item:hover & {
+    opacity: 1;
+  }
 }
 </style>

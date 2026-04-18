@@ -1,10 +1,36 @@
 $font-size: 18px;
 
-$loader-color: #ff6700;
-$white: #ffffffff;
+// Brand palette
+$color-primary: #38bdf8;      // sky-400
+$color-primary-soft: #0ea5e9; // sky-500
+$color-accent: #a855f7;       // purple-500
+$color-accent-soft: #ec4899;  // pink-500
+$color-danger: #f87171;       // red-400
+
+// Neutrals
+$white: #ffffff;
+$ink-900: #0b0d14;
+$ink-800: #111320;
+$ink-700: #1a1d2e;
+
+// Glass
+$glass-bg: rgba(255, 255, 255, 0.06);
+$glass-border: rgba(255, 255, 255, 0.14);
+$glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+// Loader
+$loader-color: $color-primary;
 
 @mixin wide-850 {
   @media screen and (max-width: 850px) {
     @content;
   }
+}
+
+@mixin glass {
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: $glass-shadow;
 }

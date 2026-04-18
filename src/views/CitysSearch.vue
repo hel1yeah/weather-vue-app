@@ -244,26 +244,28 @@ onUnmounted(() => {
 
 .city-search__locate {
   flex-shrink: 0;
-  width: 30px;
-  height: 30px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
 
   &:hover:not(:disabled) {
-    background: rgba(10, 206, 249, 0.2);
-    border-color: rgba(10, 206, 249, 0.6);
-    color: #0acef9;
+    background: rgba(56, 189, 248, 0.18);
+    border-color: rgba(56, 189, 248, 0.55);
+    color: $color-primary;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(56, 189, 248, 0.25);
   }
 
   &:focus-visible {
-    outline: 2px solid #0acef9;
+    outline: 2px solid $color-primary;
     outline-offset: 2px;
   }
 
@@ -285,21 +287,24 @@ onUnmounted(() => {
 
 .city-search__hint {
   position: absolute;
-  top: 34px;
+  top: 44px;
   left: 0;
   right: 0;
-  padding: 8px 10px;
-  background: rgba(20, 20, 25, 0.95);
+  padding: 10px 12px;
+  background: rgba(15, 17, 28, 0.92);
   color: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 13px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 500;
 
   &--error {
-    color: #ffb4b4;
-    border-color: rgba(255, 80, 80, 0.4);
+    color: #fca5a5;
+    border-color: rgba(248, 113, 113, 0.4);
   }
 }
 </style>

@@ -38,9 +38,38 @@ onMounted(() => inputRef.value?.focus());
 
 <style lang="scss" scoped>
 .search-input {
-  padding: 0 10px;
   width: 100%;
-  height: 30px;
-  border-radius: 5px;
+  height: 38px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: $white;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.5px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+
+  &:focus {
+    border-color: $color-primary;
+    background: rgba(56, 189, 248, 0.1);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+  }
+
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
 }
 </style>

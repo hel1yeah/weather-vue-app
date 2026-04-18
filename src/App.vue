@@ -22,67 +22,50 @@ import AppFooter from '@/views/AppFooter.vue';
 
 .block {
   position: relative;
-  background: linear-gradient(45deg, #272325 40%, #020104);
-  color: #fff;
-  letter-spacing: 4px;
-  padding: 40px;
+  background: linear-gradient(160deg, rgba(26, 29, 46, 0.85), rgba(11, 13, 20, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: $white;
+  letter-spacing: 2px;
+  padding: 20px 22px;
   border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
   &:after {
     content: '';
     position: absolute;
-    top: -12px;
-    right: -12px;
-    bottom: -12px;
-    left: -12px;
+    inset: -1px;
     z-index: -1;
-    border-radius: 22px;
-    background: linear-gradient(45deg, #ff005e, #fbff00);
-    animation: neon-block 15s linear infinite;
-
-    @include wide-850 {
-      top: -5px;
-      right: -5px;
-      bottom: -5px;
-      left: -5px;
-    }
+    border-radius: 21px;
+    background: linear-gradient(135deg, $color-primary, $color-accent 55%, $color-accent-soft);
+    opacity: 0.35;
   }
+
   .rainbow {
     position: absolute;
-    top: -14px;
-    right: -14px;
-    bottom: -14px;
-    left: -14px;
-    filter: blur(15px);
+    inset: -10px;
+    filter: blur(28px);
     z-index: -2;
+    opacity: 0.25;
+    pointer-events: none;
+
     &:after {
       content: '';
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background: linear-gradient(315deg, #ff005e, #fbff00);
+      inset: 0;
+      background: linear-gradient(135deg, $color-primary, $color-accent 50%, $color-accent-soft);
     }
-    &:after {
-      animation: neon-block 15s linear infinite;
-    }
+
     @include wide-850 {
-      top: -5px;
-      right: -5px;
-      bottom: -5px;
-      left: -5px;
+      inset: -6px;
     }
   }
+
   @include wide-850 {
-    padding: 10px;
-  }
-}
-@keyframes neon-block {
-  from {
-    filter: hue-rotate(0deg);
-  }
-  to {
-    filter: hue-rotate(360deg);
+    padding: 12px 10px;
+    border-radius: 16px;
+    letter-spacing: 1px;
   }
 }
 </style>
